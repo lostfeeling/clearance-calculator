@@ -5,8 +5,9 @@ body {
     background: linear-gradient(135deg, #ffdee9 0%, #f8a4c8 40%, #e84393 100%);
     min-height: 100vh;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
     padding: 40px 20px;
 }
 
@@ -188,6 +189,21 @@ tbody td {
     font-style: italic;
 }
 
+/* ===== FOOTER ===== */
+.footer {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.85rem;
+    margin-top: 24px;
+    padding: 12px 0;
+    letter-spacing: 0.3px;
+    width: 100%;
+}
+
+.footer strong {
+    color: #fff;
+}
+
 /* ===== MOBILE RESPONSIVE ===== */
 @media screen and (max-width: 600px) {
     body {
@@ -247,5 +263,9 @@ tbody td {
     .notes {
         font-size: 0.8rem;
         padding: 10px 14px;
+    }
+    .footer {
+        font-size: 0.78rem;
+        margin-top: 18px;
     }
 }
