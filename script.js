@@ -27,6 +27,11 @@ function getBulanMaju(bulanSekarang, maju) {
     return b;
 }
 
+function formatBulan(nomorBulan) {
+    const nomor = String(nomorBulan).padStart(2, '0');
+    return bulanNama[nomorBulan - 1] + ' (' + nomor + ')';
+}
+
 function generate() {
     const bulanSekarang = parseInt(document.getElementById('bulan').value);
     const produk = document.getElementById('produk').value;
@@ -41,7 +46,7 @@ function generate() {
 
             if (maju === 1) {
                 rows += `<tr class="warning-row">
-                    <td data-label="Bulan Expired">${bulanNama[blnExpired - 1]}</td>
+                    <td data-label="Bulan Expired">${formatBulan(blnExpired)}</td>
                     <td data-label="Jarak">${jarakLabel}</td>
                     <td data-label="Diskon"><span class="warning-badge">⛔ Tidak Boleh Dijual</span></td>
                     <td data-label="Warna" style="text-align:center;">—</td>
@@ -50,7 +55,7 @@ function generate() {
                 const disc = skemaReguler[maju];
                 const color = discColor[disc];
                 rows += `<tr>
-                    <td data-label="Bulan Expired">${bulanNama[blnExpired - 1]}</td>
+                    <td data-label="Bulan Expired">${formatBulan(blnExpired)}</td>
                     <td data-label="Jarak">${jarakLabel}</td>
                     <td data-label="Diskon"><span class="disc-badge" style="background:${color.bg};">${disc}%</span></td>
                     <td data-label="Warna" style="text-align:center;"><span class="color-dot" style="background:${color.bg};" title="${color.label}"></span> ${color.label}</td>
@@ -61,10 +66,11 @@ function generate() {
         skemaSheetmask.forEach(s => {
             const color = discColor[s.disc];
             const blnExpired = getBulanMaju(bulanSekarang, s.maju);
-            let blnLabel = bulanNama[blnExpired - 1];
+            let blnLabel = formatBulan(blnExpired);
 
             if (s.isMinggu) {
-                blnLabel = bulanNama[blnExpired - 1] + ' (minggu pertama)';
+                const nomor = String(blnExpired).padStart(2, '0');
+                blnLabel = bulanNama[blnExpired - 1] + ' (' + nomor + ') - minggu pertama';
             }
 
             rows += `<tr>
@@ -79,7 +85,7 @@ function generate() {
     document.getElementById('result').innerHTML = `
         <div class="result-header">
             Skema Diskon — <span>${label}</span><br>
-            <small style="font-weight:400;color:#e084ab;">Bulan saat ini: ${bulanNama[bulanSekarang - 1]}</small>
+            <small style="font-weight:400;color:#e084ab;">Bulan saat ini: ${formatBulan(bulanSekarang)}</small>
         </div>
         <table>
             <thead>
