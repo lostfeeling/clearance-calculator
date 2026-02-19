@@ -42,7 +42,7 @@ function generate() {
     if (produk === 'reguler') {
         for (let maju = 1; maju <= 7; maju++) {
             const blnExpired = getBulanMaju(bulanSekarang, maju);
-            const jarakLabel = maju + ' bulan dari sekarang';
+            const jarakLabel = 'H-' + maju + ' bulan sebelum expired';
 
             if (maju === 1) {
                 rows += `<tr class="warning-row">
