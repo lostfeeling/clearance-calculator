@@ -45,7 +45,7 @@ function generateHarga() {
     const label = produk === 'reguler' ? 'Reguler Product' : 'Sheetmask Product';
 
     if (!hargaAwal || hargaAwal <= 0) {
-        document.getElementById('resultHarga').innerHTML = '<p style="color:#c2185b; font-size:0.9rem;">Masukkan harga normal yang valid terlebih dahulu.</p>';
+        document.getElementById('resultHarga').innerHTML = '<p style="color:#c2185b; font-weight:600; font-size:0.9rem; margin-top:10px;">⚠️ Masukkan harga normal yang valid terlebih dahulu.</p>';
         return;
     }
 
@@ -62,7 +62,7 @@ function generateHarga() {
                     <td data-label="Jarak">${jarakLabel}</td>
                     <td data-label="Diskon"><span class="warning-badge">⛔ Tidak Boleh Dijual</span></td>
                     <td data-label="Warna" style="text-align:center;">—</td>
-                    <td data-label="Harga Setelah Diskon">—</td>
+                    <td data-label="Harga" class="harga-cell">—</td>
                 </tr>`;
             } else {
                 const disc = skemaReguler[maju];
@@ -73,7 +73,7 @@ function generateHarga() {
                     <td data-label="Jarak">${jarakLabel}</td>
                     <td data-label="Diskon"><span class="disc-badge" style="background:${color.bg};">${disc}%</span></td>
                     <td data-label="Warna" style="text-align:center;"><span class="color-dot" style="background:${color.bg};" title="${color.label}"></span> ${color.label}</td>
-                    <td data-label="Harga Setelah Diskon">${formatRupiah(hargaSetelah)}</td>
+                    <td data-label="Harga" class="harga-cell">${formatRupiah(hargaSetelah)}</td>
                 </tr>`;
             }
         }
@@ -95,7 +95,7 @@ function generateHarga() {
                 <td data-label="Jarak">H-${s.jarak} sebelum expired</td>
                 <td data-label="Diskon"><span class="disc-badge" style="background:${color.bg};">${s.disc}%</span></td>
                 <td data-label="Warna" style="text-align:center;"><span class="color-dot" style="background:${color.bg};" title="${color.label}"></span> ${color.label}</td>
-                <td data-label="Harga Setelah Diskon">${formatRupiah(hargaSetelah)}</td>
+                <td data-label="Harga" class="harga-cell">${formatRupiah(hargaSetelah)}</td>
             </tr>`;
         });
     }
@@ -109,7 +109,7 @@ function generateHarga() {
             <thead>
                 <tr>
                     <th>Bulan Expired</th>
-                    <th>Jarak dari Sekarang</th>
+                    <th>Jarak</th>
                     <th>Diskon</th>
                     <th style="text-align:center;">Warna</th>
                     <th>Harga Setelah Diskon</th>
