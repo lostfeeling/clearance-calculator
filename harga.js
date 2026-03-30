@@ -79,38 +79,37 @@ function generateHarga() {
             }
         }
     } else {
-        skemaSheetmask.forEach(s => {
-            const color = discColor[s.disc];
-            const blnExpired = getBulanMaju(bulanSekarang, s.maju);
-            let blnLabel = formatBulan(blnExpired);
+    skemaSheetmask.forEach(s => {
+        const blnExpired = getBulanMaju(bulanSekarang, s.maju);
+        let blnLabel = formatBulan(blnExpired);
 
-            if (s.isMinggu) {
-                const nomor = String(blnExpired).padStart(2, '0');
-                blnLabel = bulanNama[blnExpired - 1] + ' (' + nomor + ') - minggu pertama';
-            }
+        if (s.isMinggu) {
+            const nomor = String(blnExpired).padStart(2, '0');
+            blnLabel = bulanNama[blnExpired - 1] + ' (' + nomor + ') - minggu pertama';
+        }
 
-            if (s.disc === 'STOP') {
-        rows += `<tr class="warning-row">
-          <td data-label="Bulan Expired">${blnLabel}</td>
-          <td data-label="Jarak">H-${s.jarak} sebelum expired</td>
-          <td data-label="Diskon"><span class="warning-badge">Tidak Boleh Dijual</span></td>
-          <td data-label="Warna" style="text-align:center"></td>
-          <td data-label="Harga" class="harga-cell">-</td>
+        if (s.disc === 'STOP') {
+            rows += `<tr class="warning-row">
+                <td data-label="Bulan Expired">${blnLabel}</td>
+                <td data-label="Jarak">H-${s.jarak} sebelum expired</td>
+                <td data-label="Diskon"><span class="warning-badge">Tidak Boleh Dijual</span></td>
+                <td data-label="Warna" style="text-align:center"></td>
+                <td data-label="Harga" class="harga-cell">-</td>
+            </tr>`;
+            return;
+        }
+
+        const color = discColor[s.disc];
+        const hargaSetelah = Math.round(hargaAwal * (1 - s.disc / 100));
+        rows += `<tr>
+            <td data-label="Bulan Expired">${blnLabel}</td>
+            <td data-label="Jarak">H-${s.jarak} sebelum expired</td>
+            <td data-label="Diskon"><span class="disc-badge" style="background:${color.bg}">${s.disc}%</span></td>
+            <td data-label="Warna" style="text-align:center"><span class="color-dot" style="background:${color.bg}" title="${color.label}"></span> ${color.label}</td>
+            <td data-label="Harga" class="harga-cell">${formatRupiah(hargaSetelah)}</td>
         </tr>`;
-        return;
-      }
-
-      const color = discColor[s.disc];
-      const hargaSetelah = Math.round(hargaAwal * (1 - s.disc / 100));
-      rows += `<tr>
-        <td data-label="Bulan Expired">${blnLabel}</td>
-        <td data-label="Jarak">H-${s.jarak} sebelum expired</td>
-        <td data-label="Diskon"><span class="disc-badge" style="background:${color.bg}">${s.disc}%</span></td>
-        <td data-label="Warna" style="text-align:center"><span class="color-dot" style="background:${color.bg}" title="${color.label}"></span> ${color.label}</td>
-        <td data-label="Harga" class="harga-cell">${formatRupiah(hargaSetelah)}</td>
-      </tr>`;
     });
-  }
+}
 
     document.getElementById('resultHarga').innerHTML = `
         <div class="result-header">
