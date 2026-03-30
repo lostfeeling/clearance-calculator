@@ -63,7 +63,7 @@ function generate() {
                 </tr>`;
             }
         }
-    } } else {
+    } else {
     skemaSheetmask.forEach(s => {
         const blnExpired = getBulanMaju(bulanSekarang, s.maju);
         let blnLabel = formatBulan(blnExpired);
