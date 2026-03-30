@@ -15,10 +15,11 @@ const skemaReguler = {
 };
 
 const skemaSheetmask = [
-    { jarak: '1 minggu', maju: 1, disc: 90, isMinggu: true },
-    { jarak: '1 bulan', maju: 1, disc: 70, isMinggu: false },
-    { jarak: '2 bulan', maju: 2, disc: 50, isMinggu: false },
-    { jarak: '3 bulan', maju: 3, disc: 30, isMinggu: false }
+    { jarak: '1 minggu', maju: 1, disc: STOP, isMinggu: true },
+    { jarak: '1 bulan', maju: 1, disc: 90, isMinggu: true },
+    { jarak: '2 bulan', maju: 2, disc: 70, isMinggu: false },
+    { jarak: '3 bulan', maju: 3, disc: 50, isMinggu: false },
+    { jarak: '4 bulan', maju: 4, disc: 30, isMinggu: false }
 ];
 
 function getBulanMaju(bulanSekarang, maju) {
