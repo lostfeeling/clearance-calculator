@@ -77,22 +77,19 @@ function generate() {
             if (s.disc === 'STOP') {
         rows += `<tr class="warning-row">
           <td data-label="Bulan Expired">${blnLabel}</td>
-          <td data-label="Jarak">H-${s.jarak} sebelum expired</td>
+          <td data-label="Jarak dari Sekarang">H-${s.jarak} sebelum expired</td>
           <td data-label="Diskon"><span class="warning-badge">Tidak Boleh Dijual</span></td>
           <td data-label="Warna" style="text-align:center"></td>
-          <td data-label="Harga" class="harga-cell">-</td>
         </tr>`;
         return;
       }
 
       const color = discColor[s.disc];
-      const hargaSetelah = Math.round(hargaAwal * (1 - s.disc / 100));
       rows += `<tr>
         <td data-label="Bulan Expired">${blnLabel}</td>
-        <td data-label="Jarak">H-${s.jarak} sebelum expired</td>
+        <td data-label="Jarak dari Sekarang">H-${s.jarak} sebelum expired</td>
         <td data-label="Diskon"><span class="disc-badge" style="background:${color.bg}">${s.disc}%</span></td>
         <td data-label="Warna" style="text-align:center"><span class="color-dot" style="background:${color.bg}" title="${color.label}"></span> ${color.label}</td>
-        <td data-label="Harga" class="harga-cell">${formatRupiah(hargaSetelah)}</td>
       </tr>`;
     });
   }
