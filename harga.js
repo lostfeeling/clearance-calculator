@@ -15,11 +15,11 @@ const skemaReguler = {
 };
 
 const skemaSheetmask = [
-    { jarak: '1 minggu', maju: 1, disc: 'STOP', isMinggu: true },
-    { jarak: '1 bulan', maju: 1, disc: 90, isMinggu: false },
-    { jarak: '2 bulan', maju: 2, disc: 70, isMinggu: false },
-    { jarak: '3 bulan', maju: 3, disc: 50, isMinggu: false },
-    { jarak: '4 bulan', maju: 4, disc: 30, isMinggu: false }
+    { maju: 0, disc: 'STOP', weekLabel: 'Minggu 1'   },  // expired bulan ini, minggu 1
+    { maju: 0, disc: 90,     weekLabel: 'Minggu 2-4' },  // expired bulan ini, minggu 2-4
+    { maju: 1, disc: 70,     weekLabel: null },            // expired bulan depan
+    { maju: 2, disc: 50,     weekLabel: null },            // expired 2 bulan lagi
+    { maju: 3, disc: 30,     weekLabel: null },            // expired 3 bulan lagi
 ];
 
 function getBulanMaju(bulanSekarang, maju) {
@@ -46,7 +46,7 @@ function generateHarga() {
     const label = produk === 'reguler' ? 'Reguler Product' : 'Sheetmask Product';
 
     if (!hargaAwal || hargaAwal <= 0) {
-        document.getElementById('resultHarga').innerHTML = '<p style="color:#c2185b; font-weight:600; font-size:0.9rem; margin-top:10px;">âš ï¸ Masukkan harga normal yang valid terlebih dahulu.</p>';
+        document.getElementById('resultHarga').innerHTML = '<p style="color:#c2185b; font-weight:600; font-size:0.9rem; margin-top:10px;">⚠️ Masukkan harga normal yang valid terlebih dahulu.</p>';
         return;
     }
 
@@ -61,9 +61,9 @@ function generateHarga() {
                 rows += `<tr class="warning-row">
                     <td data-label="Bulan Expired">${formatBulan(blnExpired)}</td>
                     <td data-label="Jarak">${jarakLabel}</td>
-                    <td data-label="Diskon"><span class="warning-badge">â›” Tidak Boleh Dijual</span></td>
-                    <td data-label="Warna" style="text-align:center;">â€”</td>
-                    <td data-label="Harga" class="harga-cell">â€”</td>
+                    <td data-label="Diskon"><span class="warning-badge">⛔ Tidak Boleh Dijual</span></td>
+                    <td data-label="Warna" style="text-align:center;">—</td>
+                    <td data-label="Harga" class="harga-cell">—</td>
                 </tr>`;
             } else {
                 const disc = skemaReguler[maju];
@@ -113,7 +113,7 @@ function generateHarga() {
 
     document.getElementById('resultHarga').innerHTML = `
         <div class="result-header">
-            Harga Setelah Diskon â€” <span>${label}</span><br>
+            Harga Setelah Diskon — <span>${label}</span><br>
             <small style="font-weight:400;color:#e084ab;">Bulan saat ini: ${formatBulan(bulanSekarang)} &bull; Harga normal: ${formatRupiah(hargaAwal)}</small>
         </div>
         <table>
