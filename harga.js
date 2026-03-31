@@ -78,23 +78,23 @@ function generateHarga() {
                 </tr>`;
             }
         }
-    } else {
+    } } else {
     skemaSheetmask.forEach(s => {
         const blnExpired = getBulanMaju(bulanSekarang, s.maju);
         let blnLabel = formatBulan(blnExpired);
+        if (s.weekLabel) blnLabel += ' — ' + s.weekLabel;
 
-        if (s.isMinggu) {
-            const nomor = String(blnExpired).padStart(2, '0');
-            blnLabel = bulanNama[blnExpired - 1] + ' (' + nomor + ') - minggu pertama';
-        }
+        const jarakLabel = s.maju === 0
+            ? 'Expired bulan ini — ' + s.weekLabel
+            : 'H-' + s.maju + ' bulan sebelum expired';
 
         if (s.disc === 'STOP') {
             rows += `<tr class="warning-row">
                 <td data-label="Bulan Expired">${blnLabel}</td>
-                <td data-label="Jarak">H-${s.jarak} sebelum expired</td>
-                <td data-label="Diskon"><span class="warning-badge">Tidak Boleh Dijual</span></td>
-                <td data-label="Warna" style="text-align:center"></td>
-                <td data-label="Harga" class="harga-cell">-</td>
+                <td data-label="Jarak">${jarakLabel}</td>
+                <td data-label="Diskon"><span class="warning-badge">⛔ Tidak Boleh Dijual</span></td>
+                <td data-label="Warna" style="text-align:center;">—</td>
+                <td data-label="Harga" class="harga-cell">—</td>
             </tr>`;
             return;
         }
@@ -103,9 +103,9 @@ function generateHarga() {
         const hargaSetelah = Math.round(hargaAwal * (1 - s.disc / 100));
         rows += `<tr>
             <td data-label="Bulan Expired">${blnLabel}</td>
-            <td data-label="Jarak">H-${s.jarak} sebelum expired</td>
-            <td data-label="Diskon"><span class="disc-badge" style="background:${color.bg}">${s.disc}%</span></td>
-            <td data-label="Warna" style="text-align:center"><span class="color-dot" style="background:${color.bg}" title="${color.label}"></span> ${color.label}</td>
+            <td data-label="Jarak">${jarakLabel}</td>
+            <td data-label="Diskon"><span class="disc-badge" style="background:${color.bg};">${s.disc}%</span></td>
+            <td data-label="Warna" style="text-align:center;"><span class="color-dot" style="background:${color.bg};" title="${color.label}"></span> ${color.label}</td>
             <td data-label="Harga" class="harga-cell">${formatRupiah(hargaSetelah)}</td>
         </tr>`;
     });
