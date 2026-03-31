@@ -49,8 +49,8 @@ function generate() {
                 rows += `<tr class="warning-row">
                     <td data-label="Bulan Expired">${formatBulan(blnExpired)}</td>
                     <td data-label="Jarak">${jarakLabel}</td>
-                    <td data-label="Diskon"><span class="warning-badge">⛔ Tidak Boleh Dijual</span></td>
-                    <td data-label="Warna" style="text-align:center;">—</td>
+                    <td data-label="Diskon"><span class="warning-badge">â›” Tidak Boleh Dijual</span></td>
+                    <td data-label="Warna" style="text-align:center;">â€”</td>
                 </tr>`;
             } else {
                 const disc = skemaReguler[maju];
@@ -78,7 +78,7 @@ function generate() {
                 <td data-label="Bulan Expired">${blnLabel}</td>
                 <td data-label="Jarak dari Sekarang">H-${s.jarak} sebelum expired</td>
                 <td data-label="Diskon"><span class="warning-badge">Tidak Boleh Dijual</span></td>
-                <td data-label="Warna" style="text-align:center;">—</td>
+                <td data-label="Warna" style="text-align:center;">â€”</td>
             </tr>`;
             return;
         }
@@ -96,7 +96,7 @@ function generate() {
 
     document.getElementById('result').innerHTML = `
         <div class="result-header">
-            Skema Diskon — <span>${label}</span><br>
+            Skema Diskon â€” <span>${label}</span><br>
             <small style="font-weight:400;color:#e084ab;">Bulan saat ini: ${formatBulan(bulanSekarang)}</small>
         </div>
         <table>
