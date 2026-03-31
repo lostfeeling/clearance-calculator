@@ -46,7 +46,7 @@ function generateHarga() {
     const label = produk === 'reguler' ? 'Reguler Product' : 'Sheetmask Product';
 
     if (!hargaAwal || hargaAwal <= 0) {
-        document.getElementById('resultHarga').innerHTML = '<p style="color:#c2185b; font-weight:600; font-size:0.9rem; margin-top:10px;">⚠️ Masukkan harga normal yang valid terlebih dahulu.</p>';
+        document.getElementById('resultHarga').innerHTML = '<p style="color:#c2185b; font-weight:600; font-size:0.9rem; margin-top:10px;">âš ï¸ Masukkan harga normal yang valid terlebih dahulu.</p>';
         return;
     }
 
@@ -61,9 +61,9 @@ function generateHarga() {
                 rows += `<tr class="warning-row">
                     <td data-label="Bulan Expired">${formatBulan(blnExpired)}</td>
                     <td data-label="Jarak">${jarakLabel}</td>
-                    <td data-label="Diskon"><span class="warning-badge">⛔ Tidak Boleh Dijual</span></td>
-                    <td data-label="Warna" style="text-align:center;">—</td>
-                    <td data-label="Harga" class="harga-cell">—</td>
+                    <td data-label="Diskon"><span class="warning-badge">â›” Tidak Boleh Dijual</span></td>
+                    <td data-label="Warna" style="text-align:center;">â€”</td>
+                    <td data-label="Harga" class="harga-cell">â€”</td>
                 </tr>`;
             } else {
                 const disc = skemaReguler[maju];
@@ -113,7 +113,7 @@ function generateHarga() {
 
     document.getElementById('resultHarga').innerHTML = `
         <div class="result-header">
-            Harga Setelah Diskon — <span>${label}</span><br>
+            Harga Setelah Diskon â€” <span>${label}</span><br>
             <small style="font-weight:400;color:#e084ab;">Bulan saat ini: ${formatBulan(bulanSekarang)} &bull; Harga normal: ${formatRupiah(hargaAwal)}</small>
         </div>
         <table>
