@@ -15,11 +15,11 @@ const skemaReguler = {
 };
 
 const skemaSheetmask = [
-    { jarak: '1 minggu', maju: 1, disc: 'STOP', isMinggu: true },
-    { jarak: '1 bulan', maju: 1, disc: 90, isMinggu: false },
-    { jarak: '2 bulan', maju: 2, disc: 70, isMinggu: false },
-    { jarak: '3 bulan', maju: 3, disc: 50, isMinggu: false },
-    { jarak: '4 bulan', maju: 4, disc: 30, isMinggu: false }
+    { maju: 0, disc: 'STOP', weekLabel: 'Minggu 1'   },  // expired bulan ini, minggu 1
+    { maju: 0, disc: 90,     weekLabel: 'Minggu 2-4' },  // expired bulan ini, minggu 2-4
+    { maju: 1, disc: 70,     weekLabel: null },            // expired bulan depan
+    { maju: 2, disc: 50,     weekLabel: null },            // expired 2 bulan lagi
+    { maju: 3, disc: 30,     weekLabel: null },            // expired 3 bulan lagi
 ];
 
 function getBulanMaju(bulanSekarang, maju) {
@@ -49,8 +49,8 @@ function generate() {
                 rows += `<tr class="warning-row">
                     <td data-label="Bulan Expired">${formatBulan(blnExpired)}</td>
                     <td data-label="Jarak">${jarakLabel}</td>
-                    <td data-label="Diskon"><span class="warning-badge">â›” Tidak Boleh Dijual</span></td>
-                    <td data-label="Warna" style="text-align:center;">â€”</td>
+                    <td data-label="Diskon"><span class="warning-badge">⛔ Tidak Boleh Dijual</span></td>
+                    <td data-label="Warna" style="text-align:center;">—</td>
                 </tr>`;
             } else {
                 const disc = skemaReguler[maju];
@@ -78,7 +78,7 @@ function generate() {
                 <td data-label="Bulan Expired">${blnLabel}</td>
                 <td data-label="Jarak dari Sekarang">H-${s.jarak} sebelum expired</td>
                 <td data-label="Diskon"><span class="warning-badge">Tidak Boleh Dijual</span></td>
-                <td data-label="Warna" style="text-align:center;">â€”</td>
+                <td data-label="Warna" style="text-align:center;">—</td>
             </tr>`;
             return;
         }
@@ -96,7 +96,7 @@ function generate() {
 
     document.getElementById('result').innerHTML = `
         <div class="result-header">
-            Skema Diskon â€” <span>${label}</span><br>
+            Skema Diskon — <span>${label}</span><br>
             <small style="font-weight:400;color:#e084ab;">Bulan saat ini: ${formatBulan(bulanSekarang)}</small>
         </div>
         <table>
