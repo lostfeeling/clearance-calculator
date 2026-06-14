@@ -14,12 +14,13 @@ const skemaReguler = {
     7: 30, 6: 40, 5: 50, 4: 70, 3: 80, 2: 90, 1: 'STOP'
 };
 
+// Skema sheetmask berdasarkan hari sebelum expired
 const skemaSheetmask = [
-    { maju: 0, disc: 'STOP', weekLabel: 'Minggu 1'   },
-    { maju: 0, disc: 90,     weekLabel: 'Minggu 2-4' },
-    { maju: 1, disc: 70,     weekLabel: null },
-    { maju: 2, disc: 50,     weekLabel: null },
-    { maju: 3, disc: 30,     weekLabel: null }
+    { minDays: 0, maxDays: 7, disc: 'STOP', label: '1–7 Hari Sebelum Expired' },
+    { minDays: 8, maxDays: 30, disc: 90, label: '8–30 Hari Sebelum Expired' },
+    { minDays: 31, maxDays: 60, disc: 70, label: '31–60 Hari Sebelum Expired' },
+    { minDays: 61, maxDays: 90, disc: 50, label: '61–90 Hari Sebelum Expired' },
+    { minDays: 91, maxDays: 120, disc: 30, label: '91–120 Hari Sebelum Expired' }
 ];
 
 function getBulanMaju(bulanSekarang, maju) {
@@ -33,14 +34,34 @@ function formatBulan(nomorBulan) {
     return bulanNama[nomorBulan - 1] + ' (' + nomor + ')';
 }
 
-function generate() {
-    const bulanSekarang = parseInt(document.getElementById('bulan').value);
-    const produk = document.getElementById('produk').value;
+function formatTanggal(date) {
+    const d = date.getDate().toString().padStart(2, '0');
+    const m = (date.getMonth() + 1).toString().padStart(2, '0');
+    const y = date.getFullYear();
+    return `${d}/${m}/${y}`;
+}
+
+function formatRupiah(angka) {
+    if (isNaN(angka)) return '-';
+    return 'Rp ' + angka.toLocaleString('id-ID');
+}
+
+function generateHarga() {
+    const hargaInput = document.getElementById('hargaAwal').value;
+    const hargaAwal = parseFloat(hargaInput);
+    const produk = document.getElementById('produk2').value;
     const label = produk === 'reguler' ? 'Reguler Product' : 'Sheetmask Product';
+
+    if (!hargaAwal || hargaAwal <= 0) {
+        document.getElementById('resultHarga').innerHTML =
+            '<p style="color:#c2185b; font-weight:600; font-size:0.9rem; margin-top:10px;">⚠️ Masukkan harga normal yang valid terlebih dahulu.</p>';
+        return;
+    }
 
     let rows = '';
 
     if (produk === 'reguler') {
+        const bulanSekarang = parseInt(document.getElementById('bulan2').value);
         for (let maju = 1; maju <= 7; maju++) {
             const blnExpired = getBulanMaju(bulanSekarang, maju);
             const jarakLabel = 'H-' + maju + ' bulan sebelum expired';
@@ -48,69 +69,97 @@ function generate() {
             if (maju === 1) {
                 rows += `<tr class="warning-row">
                     <td data-label="Bulan Expired">${formatBulan(blnExpired)}</td>
-                    <td data-label="Jarak dari Sekarang">${jarakLabel}</td>
+                    <td data-label="Jarak">${jarakLabel}</td>
                     <td data-label="Diskon"><span class="warning-badge">⛔ Tidak Boleh Dijual</span></td>
                     <td data-label="Warna" style="text-align:center;">—</td>
+                    <td data-label="Harga" class="harga-cell">—</td>
                 </tr>`;
             } else {
                 const disc = skemaReguler[maju];
                 const color = discColor[disc];
+                const hargaSetelah = Math.round(hargaAwal * (1 - disc / 100));
                 rows += `<tr>
                     <td data-label="Bulan Expired">${formatBulan(blnExpired)}</td>
-                    <td data-label="Jarak dari Sekarang">${jarakLabel}</td>
+                    <td data-label="Jarak">${jarakLabel}</td>
                     <td data-label="Diskon"><span class="disc-badge" style="background:${color.bg};">${disc}%</span></td>
                     <td data-label="Warna" style="text-align:center;"><span class="color-dot" style="background:${color.bg};" title="${color.label}"></span> ${color.label}</td>
+                    <td data-label="Harga" class="harga-cell">${formatRupiah(hargaSetelah)}</td>
                 </tr>`;
             }
         }
     } else {
-        skemaSheetmask.forEach(s => {
-            const blnExpired = getBulanMaju(bulanSekarang, s.maju);
-            let blnLabel = formatBulan(blnExpired);
-            if (s.weekLabel) blnLabel += ' — ' + s.weekLabel;
+        // SHEETMASK: baca bulan dan hari
+        const bulanExpired = parseInt(document.getElementById('bulan2').value);
+        const hariExpired = parseInt(document.getElementById('hariExpired').value);
 
-            const jarakLabel = s.maju === 0
-                ? 'Expired bulan ini — ' + s.weekLabel
-                : 'H-' + s.maju + ' bulan sebelum expired';
+        if (!hariExpired || hariExpired < 1 || hariExpired > 31) {
+            document.getElementById('resultHarga').innerHTML =
+                '<p style="color:#c2185b; font-weight:600;">⚠️ Isi tanggal expired (1–31) terlebih dahulu.</p>';
+            return;
+        }
+
+        // Tentukan tahun expired otomatis
+        const now = new Date();
+        const thisYear = now.getFullYear();
+        let expiredDate = new Date(thisYear, bulanExpired - 1, hariExpired);
+        if (expiredDate < new Date(now.getFullYear(), now.getMonth(), now.getDate())) {
+            expiredDate.setFullYear(thisYear + 1);
+        }
+
+        skemaSheetmask.forEach(s => {
+            const startDate = new Date(expiredDate);
+            startDate.setDate(expiredDate.getDate() - s.maxDays);
+            const endDate = new Date(expiredDate);
+            endDate.setDate(expiredDate.getDate() - s.minDays);
+
+            const jarakLabel = s.label;
 
             if (s.disc === 'STOP') {
                 rows += `<tr class="warning-row">
-                    <td data-label="Bulan Expired">${blnLabel}</td>
-                    <td data-label="Jarak dari Sekarang">${jarakLabel}</td>
+                    <td data-label="Periode">${formatTanggal(startDate)} – ${formatTanggal(endDate)}</td>
+                    <td data-label="Jarak">${jarakLabel}</td>
                     <td data-label="Diskon"><span class="warning-badge">⛔ Tidak Boleh Dijual</span></td>
                     <td data-label="Warna" style="text-align:center;">—</td>
+                    <td data-label="Harga" class="harga-cell">—</td>
                 </tr>`;
                 return;
             }
 
             const color = discColor[s.disc];
+            const hargaSetelah = Math.round(hargaAwal * (1 - s.disc / 100));
             rows += `<tr>
-                <td data-label="Bulan Expired">${blnLabel}</td>
-                <td data-label="Jarak dari Sekarang">${jarakLabel}</td>
+                <td data-label="Periode">${formatTanggal(startDate)} – ${formatTanggal(endDate)}</td>
+                <td data-label="Jarak">${jarakLabel}</td>
                 <td data-label="Diskon"><span class="disc-badge" style="background:${color.bg};">${s.disc}%</span></td>
                 <td data-label="Warna" style="text-align:center;"><span class="color-dot" style="background:${color.bg};" title="${color.label}"></span> ${color.label}</td>
+                <td data-label="Harga" class="harga-cell">${formatRupiah(hargaSetelah)}</td>
             </tr>`;
         });
     }
 
-    document.getElementById('result').innerHTML = `
+    const info = produk === 'reguler'
+        ? `Bulan saat ini: ${formatBulan(parseInt(document.getElementById('bulan2').value))} • Harga normal: ${formatRupiah(hargaAwal)}`
+        : `Expired: ${document.getElementById('hariExpired').value} ${bulanNama[document.getElementById('bulan2').value - 1]} • Harga normal: ${formatRupiah(hargaAwal)}`;
+
+    document.getElementById('resultHarga').innerHTML = `
         <div class="result-header">
-            Skema Diskon — <span>${label}</span><br>
-            <small style="font-weight:400;color:#e084ab;">Bulan saat ini: ${formatBulan(bulanSekarang)}</small>
+            Harga Setelah Diskon — <span>${label}</span><br>
+            <small style="font-weight:400;color:#e084ab;">${info}</small>
         </div>
         <table>
             <thead>
                 <tr>
-                    <th>Bulan Expired</th>
-                    <th>Jarak dari Sekarang</th>
+                    <th>Periode Penjualan</th>
+                    <th>Jarak ke Expired</th>
                     <th>Diskon</th>
                     <th style="text-align:center;">Warna</th>
+                    <th>Harga Setelah Diskon</th>
                 </tr>
             </thead>
             <tbody>${rows}</tbody>
         </table>
         <div class="notes">
-            *Skema diskon ini berdasarkan Clearance Sale Guidelines Desember 2024
+            *Skema diskon ini berdasarkan Clearance Sale Guidelines 2026
         </div>
     `;
 }
