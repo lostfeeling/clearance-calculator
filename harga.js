@@ -1,3 +1,92 @@
+const bulanNama = ['Januari','Februari','Maret','April','Mei','Juni',
+                   'Juli','Agustus','September','Oktober','November','Desember'];
+
+const discColor = {
+    30: { bg: '#f1c40f', label: 'Kuning' },
+    40: { bg: '#2ecc71', label: 'Hijau' },
+    50: { bg: '#e67e22', label: 'Orange' },
+    70: { bg: '#3498db', label: 'Biru' },
+    80: { bg: '#e91e8a', label: 'Pink' },
+    90: { bg: '#e74c3c', label: 'Merah' }
+};
+
+const skemaReguler = {
+    7: 30, 6: 40, 5: 50, 4: 70, 3: 80, 2: 90, 1: 'STOP'
+};
+
+// Skema sheetmask berdasarkan hari sebelum expired
+const skemaSheetmask = [
+    { minDays: 0, maxDays: 7, disc: 'STOP', label: '1–7 Hari Sebelum Expired' },
+    { minDays: 8, maxDays: 30, disc: 90, label: '8–30 Hari Sebelum Expired' },
+    { minDays: 31, maxDays: 60, disc: 70, label: '31–60 Hari Sebelum Expired' },
+    { minDays: 61, maxDays: 90, disc: 50, label: '61–90 Hari Sebelum Expired' },
+    { minDays: 91, maxDays: 120, disc: 30, label: '91–120 Hari Sebelum Expired' }
+];
+
+function getBulanMaju(bulanSekarang, maju) {
+    let b = bulanSekarang + maju;
+    if (b > 12) b -= 12;
+    return b;
+}
+
+function formatBulan(nomorBulan) {
+    const nomor = String(nomorBulan).padStart(2, '0');
+    return bulanNama[nomorBulan - 1] + ' (' + nomor + ')';
+}
+
+function formatTanggal(date) {
+    const d = date.getDate().toString().padStart(2, '0');
+    const m = (date.getMonth() + 1).toString().padStart(2, '0');
+    const y = date.getFullYear();
+    return `${d}/${m}/${y}`;
+}
+
+function formatRupiah(angka) {
+    if (isNaN(angka)) return '-';
+    return 'Rp ' + angka.toLocaleString('id-ID');
+}
+
+function generateHarga() {
+    const hargaInput = document.getElementById('hargaAwal').value;
+    const hargaAwal = parseFloat(hargaInput);
+    const produk = document.getElementById('produk2').value;
+    const label = produk === 'reguler' ? 'Reguler Product' : 'Sheetmask Product';
+
+    if (!hargaAwal || hargaAwal <= 0) {
+        document.getElementById('resultHarga').innerHTML =
+            '<p style="color:#c2185b; font-weight:600; font-size:0.9rem; margin-top:10px;">⚠️ Masukkan harga normal yang valid terlebih dahulu.</p>';
+        return;
+    }
+
+    let rows = '';
+
+    if (produk === 'reguler') {
+        const bulanSekarang = parseInt(document.getElementById('bulan2').value);
+        for (let maju = 1; maju <= 7; maju++) {
+            const blnExpired = getBulanMaju(bulanSekarang, maju);
+            const jarakLabel = 'H-' + maju + ' bulan sebelum expired';
+
+            if (maju === 1) {
+                rows += `<tr class="warning-row">
+                    <td data-label="Bulan Expired">${formatBulan(blnExpired)}</td>
+                    <td data-label="Jarak">${jarakLabel}</td>
+                    <td data-label="Diskon"><span class="warning-badge">⛔ Tidak Boleh Dijual</span></td>
+                    <td data-label="Warna" style="text-align:center;">—</td>
+                    <td data-label="Harga" class="harga-cell">—</td>
+                </tr>`;
+            } else {
+                const disc = skemaReguler[maju];
+                const color = discColor[disc];
+                const hargaSetelah = Math.round(hargaAwal * (1 - disc / 100));
+                rows += `<tr>
+                    <td data-label="Bulan Expired">${formatBulan(blnExpired)}</td>
+                    <td data-label="Jarak">${jarakLabel}</td>
+                    <td data-label="Diskon"><span class="disc-badge" style="background:${color.bg};">${disc}%</span></td>
+                    <td data-label="Warna" style="text-align:center;"><span class="color-dot" style="background:${color.bg};" title="${color.label}"></span> ${color.label}</td>
+                    <td data-label="Harga" class="harga-cell">${formatRupiah(hargaSetelah)}</td>
+                </tr>`;
+            }
+        }
 } else {
     // SHEETMASK dengan skema H-7
     const bulanExpired = parseInt(document.getElementById('bulan2').value);
