@@ -117,6 +117,7 @@ input[type="number"]:focus {
     display: block;
     width: 100%;
     margin-top: 16px;
+    margin-bottom: 0;
     padding: 13px;
     border-radius: 12px;
     border: 2px solid #f8a4c8;
@@ -264,6 +265,52 @@ tbody td {
     color: #fff;
 }
 
+/* Two columns layout */
+.two-columns {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+.form-col {
+    flex: 2;
+    min-width: 200px;
+}
+.image-col {
+    flex: 1;
+    min-width: 160px;
+    align-self: flex-start;
+}
+.guidelines-card {
+    background: #fff0f6;
+    border-radius: 20px;
+    padding: 16px;
+    text-align: center;
+    border: 1px solid #f8c8dc;
+    position: sticky;
+    top: 20px;
+}
+.guidelines-header {
+    font-weight: 700;
+    color: #c2185b;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+}
+.guidelines-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.guidelines-img:hover {
+    transform: scale(1.02);
+}
+.guidelines-caption {
+    font-size: 0.7rem;
+    color: #e084ab;
+    margin-top: 8px;
+}
+
 /* ===== MOBILE RESPONSIVE ===== */
 @media screen and (max-width: 600px) {
     body {
@@ -332,5 +379,18 @@ tbody td {
     .footer {
         font-size: 0.78rem;
         margin-top: 18px;
+    }
+}
+
+@media (max-width: 650px) {
+    .two-columns {
+        flex-direction: column;
+    }
+    .image-col {
+        order: -1; /* gambar di atas form untuk mobile */
+        margin-bottom: 10px;
+    }
+    .guidelines-card {
+        position: static;
     }
 }
