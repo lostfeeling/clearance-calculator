@@ -18,9 +18,9 @@ const skemaReguler = {
 const skemaSheetmask = [
     { minDays: 0, maxDays: 7, disc: 'STOP', label: '1–7 Hari Sebelum Expired' },
     { minDays: 8, maxDays: 30, disc: 90, label: '8–30 Hari Sebelum Expired' },
-    { minDays: 31, maxDays: 60, disc: 70, label: '31–60 Hari Sebelum Expired' },
-    { minDays: 61, maxDays: 90, disc: 50, label: '61–90 Hari Sebelum Expired' },
-    { minDays: 91, maxDays: 120, disc: 30, label: '91–120 Hari Sebelum Expired' }
+    { minDays: 31, maxDays: 60, disc: 70, label: '31–60 Hari (H-2 Bulan) Sebelum Expired' },
+    { minDays: 61, maxDays: 90, disc: 50, label: '61–90 Hari (H-3 Bulan) Sebelum Expired' },
+    { minDays: 91, maxDays: 120, disc: 30, label: '91–120 Hari (H-4 Bulan) Sebelum Expired' }
 ];
 
 function getBulanMaju(bulanSekarang, maju) {
