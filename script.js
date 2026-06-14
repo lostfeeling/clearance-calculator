@@ -137,6 +137,31 @@ function generateHarga() {
         });
     }
 
+    let notesText = '';
+    if (produk === 'reguler') {
+        notesText = `
+            <strong>📌 Panduan Skema Diskon - Reguler Product</strong><br>
+            • <strong>H-1 bulan</strong> sebelum expired → <span style="color:#c2185b;">⛔ TIDAK BOLEH DIJUAL (STOP)</span><br>
+            • <strong>H-2 bulan</strong> sebelum expired → Diskon <strong>90%</strong> <span style="background:#e74c3c; display:inline-block; width:12px; height:12px; border-radius:12px;"></span> (Merah)<br>
+            • <strong>H-3 bulan</strong> sebelum expired → Diskon <strong>80%</strong> <span style="background:#e91e8a; display:inline-block; width:12px; height:12px; border-radius:12px;"></span> (Pink)<br>
+            • <strong>H-4 bulan</strong> sebelum expired → Diskon <strong>70%</strong> <span style="background:#3498db; display:inline-block; width:12px; height:12px; border-radius:12px;"></span> (Biru)<br>
+            • <strong>H-5 bulan</strong> sebelum expired → Diskon <strong>50%</strong> <span style="background:#e67e22; display:inline-block; width:12px; height:12px; border-radius:12px;"></span> (Orange)<br>
+            • <strong>H-6 bulan</strong> sebelum expired → Diskon <strong>40%</strong> <span style="background:#2ecc71; display:inline-block; width:12px; height:12px; border-radius:12px;"></span> (Hijau)<br>
+            • <strong>H-7 bulan</strong> sebelum expired → Diskon <strong>30%</strong> <span style="background:#f1c40f; display:inline-block; width:12px; height:12px; border-radius:12px;"></span> (Kuning)<br>
+            <em>Contoh: Jika hari ini bulan Maret, maka H-2 artinya bulan Mei (2 bulan dari sekarang).</em>
+        `;
+    } else {
+        notesText = `
+            <strong>📌 Panduan Skema Diskon - Sheetmask Product</strong><br>
+            • <strong>1–7 hari</strong> sebelum expired → <span style="color:#c2185b;">⛔ TIDAK BOLEH DIJUAL (STOP)</span><br>
+            • <strong>8–30 hari</strong> sebelum expired → Diskon <strong>90%</strong> <span style="background:#e74c3c; display:inline-block; width:12px; height:12px; border-radius:12px;"></span> (Merah)<br>
+            • <strong>31–60 hari</strong> sebelum expired → Diskon <strong>70%</strong> <span style="background:#3498db; display:inline-block; width:12px; height:12px; border-radius:12px;"></span> (Biru)<br>
+            • <strong>61–90 hari</strong> sebelum expired → Diskon <strong>50%</strong> <span style="background:#e67e22; display:inline-block; width:12px; height:12px; border-radius:12px;"></span> (Orange)<br>
+            • <strong>91–120 hari</strong> sebelum expired → Diskon <strong>30%</strong> <span style="background:#f1c40f; display:inline-block; width:12px; height:12px; border-radius:12px;"></span> (Kuning)<br>
+            <em>Catatan: Perhitungan mundur dari tanggal expired. Contoh: expired 30 Juni, maka 8–30 hari sebelum expired adalah 31 Mei – 22 Juni.</em>
+        `;
+    }
+
     const info = produk === 'reguler'
         ? `Bulan saat ini: ${formatBulan(parseInt(document.getElementById('bulan2').value))} • Harga normal: ${formatRupiah(hargaAwal)}`
         : `Expired: ${document.getElementById('hariExpired').value} ${bulanNama[document.getElementById('bulan2').value - 1]} • Harga normal: ${formatRupiah(hargaAwal)}`;
