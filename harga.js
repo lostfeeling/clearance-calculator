@@ -142,6 +142,36 @@ function generateHarga() {
         ? `Bulan saat ini: ${formatBulan(parseInt(document.getElementById('bulan2').value))} • Harga normal: ${formatRupiah(hargaAwal)}`
         : `Expired: ${document.getElementById('hariExpired').value} ${bulanNama[document.getElementById('bulan2').value - 1]} • Harga normal: ${formatRupiah(hargaAwal)}`;
 
+    let notesText = '';
+if (produk === 'reguler') {
+    notesText = `
+        📌 <strong>PANDUAN SKEMA DISKON UNTUK PRODUK REGULER</strong><br>
+        • H-1 bulan sebelum kadaluarsa → <strong>TIDAK BOLEH DIJUAL</strong> (STOP)<br>
+        • H-2 bulan sebelum kadaluarsa → Diskon <strong>90%</strong> (warna Merah)<br>
+        • H-3 bulan sebelum kadaluarsa → Diskon <strong>80%</strong> (warna Pink)<br>
+        • H-4 bulan sebelum kadaluarsa → Diskon <strong>70%</strong> (warna Biru)<br>
+        • H-5 bulan sebelum kadaluarsa → Diskon <strong>50%</strong> (warna Orange)<br>
+        • H-6 bulan sebelum kadaluarsa → Diskon <strong>40%</strong> (warna Hijau)<br>
+        • H-7 bulan sebelum kadaluarsa → Diskon <strong>30%</strong> (warna Kuning)<br>
+        <em>Contoh: Jika hari ini bulan Maret, maka H-2 artinya bulan Mei (2 bulan dari sekarang).</em>
+    `;
+} else {
+    notesText = `
+        📌 <strong>PANDUAN SKEMA DISKON UNTUK PRODUK SHEETMASK</strong><br>
+        • <strong>1–7 hari sebelum kadaluarsa</strong> → <strong>TIDAK BOLEH DIJUAL</strong> (STOP)<br>
+        • <strong>8–37 hari sebelum kadaluarsa</strong> → Diskon <strong>90%</strong> (warna Merah)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<em>≈ setara 1 bulan sebelum tanggal H-7</em><br>
+        • <strong>38–67 hari sebelum kadaluarsa</strong> → Diskon <strong>70%</strong> (warna Biru)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<em>≈ setara 2 bulan sebelum tanggal H-7</em><br>
+        • <strong>68–97 hari sebelum kadaluarsa</strong> → Diskon <strong>50%</strong> (warna Orange)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<em>≈ setara 3 bulan sebelum tanggal H-7</em><br>
+        • <strong>98–127 hari sebelum kadaluarsa</strong> → Diskon <strong>30%</strong> (warna Kuning)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<em>≈ setara 4 bulan sebelum tanggal H-7</em><br>
+        <strong>*Catatan:</strong> H-7 adalah 7 hari sebelum tanggal kadaluarsa. Perhitungan hari mundur dari tanggal expired.<br>
+        <em>Contoh: Jika kadaluarsa 30 Juni, maka H-7 = 23 Juni. Rentang 8–37 hari sebelum expired = 24 Mei – 23 Juni.</em>
+    `;
+}
+  
     document.getElementById('resultHarga').innerHTML = `
         <div class="result-header">
             Harga Setelah Diskon — <span>${label}</span><br>
@@ -159,8 +189,6 @@ function generateHarga() {
             </thead>
             <tbody>${rows}</tbody>
         </table>
-        <div class="notes">
-            *Skema Sheetmask: STOP (1-7 hari), 90% (8-37 hari), 70% (38-67), 50% (68-97), 30% (98-127).
-        </div>
+        <div class="notes">${notesText}</div>
     `;
 }
