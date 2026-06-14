@@ -12,65 +12,100 @@
         <h3>Skema clearance sheetmask ini berdasarkan yang di pahami oleh fauzi pada Clearance Sale Guidelines terbaru</h3>
         <p class="subtitle">Simulasi harga jual produk clearance berdasarkan bulan & tipe produk</p>
 
-        <div class="form-group">
-            <label for="hargaAwal">Harga Normal (Rp)</label>
-            <input type="number" id="hargaAwal" placeholder="contoh: 150000" min="0" step="1000">
-        </div>
+        <!-- DUA KOLOM: FORM KIRI, GAMBAR KANAN -->
+        <div class="two-columns">
+            <!-- Kolom Kiri: semua input, dropdown, dan tombol hitung -->
+            <div class="form-col">
+                <div class="form-group">
+                    <label for="hargaAwal">Harga Normal (Rp)</label>
+                    <input type="number" id="hargaAwal" placeholder="contoh: 150000" min="0" step="1000">
+                </div>
 
-        <!-- Dropdown bulan selalu tampil -->
-        <div class="form-group" id="groupBulan">
-            <label for="bulan2" id="labelBulan">Bulan Saat Ini</label>
-            <select id="bulan2">
-                <option value="1">Januari</option>
-                <option value="2">Februari</option>
-                <option value="3">Maret</option>
-                <option value="4">April</option>
-                <option value="5">Mei</option>
-                <option value="6">Juni</option>
-                <option value="7">Juli</option>
-                <option value="8">Agustus</option>
-                <option value="9">September</option>
-                <option value="10">Oktober</option>
-                <option value="11">November</option>
-                <option value="12">Desember</option>
-            </select>
-            <small style="color:#666;display:block;margin-top:4px;" id="ketBulan">(untuk produk Reguler)</small>
-        </div>
+                <div class="form-group" id="groupBulan">
+                    <label for="bulan2" id="labelBulan">Bulan Saat Ini</label>
+                    <select id="bulan2">
+                        <option value="1">Januari</option>
+                        <option value="2">Februari</option>
+                        <option value="3">Maret</option>
+                        <option value="4">April</option>
+                        <option value="5">Mei</option>
+                        <option value="6">Juni</option>
+                        <option value="7">Juli</option>
+                        <option value="8">Agustus</option>
+                        <option value="9">September</option>
+                        <option value="10">Oktober</option>
+                        <option value="11">November</option>
+                        <option value="12">Desember</option>
+                    </select>
+                    <small class="form-note" id="ketBulan">(untuk produk Reguler)</small>
+                </div>
 
-        <!-- Input hari untuk sheetmask (hanya muncul jika produk sheetmask) -->
-        <div class="form-group" id="groupHari" style="display: none;">
-            <label for="hariExpired">Tanggal (hari)</label>
-            <input type="number" id="hariExpired" min="1" max="31" placeholder="1–31">
-            <small style="color:#666;display:block;margin-top:4px;">(tanggal expired)</small>
-        </div>
+                <div class="form-group" id="groupHari" style="display: none;">
+                    <label for="hariExpired">Tanggal (hari)</label>
+                    <input type="number" id="hariExpired" min="1" max="31" placeholder="1–31">
+                    <small class="form-note">(tanggal expired)</small>
+                </div>
 
-        <div class="form-group">
-            <label for="produk2">Tipe Produk</label>
-            <select id="produk2" onchange="toggleProductFields()">
-                <option value="reguler">Reguler Product</option>
-                <option value="sheetmask">Sheetmask Product</option>
-            </select>
-        </div>
+                <div class="form-group">
+                    <label for="produk2">Tipe Produk</label>
+                    <select id="produk2" onchange="toggleProductFields()">
+                        <option value="reguler">Reguler Product</option>
+                        <option value="sheetmask">Sheetmask Product</option>
+                    </select>
+                </div>
 
-        <button class="btn-generate" onclick="generateHarga()">Hitung Harga</button>
-        <!-- Gambar Clearance Guidelines -->
-        <div class="guidelines-card">
-            <div class="guidelines-header">
-                <span>📘</span> Pedoman Clearance Sale 2026
+                <button class="btn-generate" onclick="generateHarga()">Hitung Harga</button>
             </div>
-            <img src="path/to/guidelines-image.jpg" alt="Clearance Guidelines" class="guidelines-img">
-            <div class="guidelines-caption">Skema diskon sesuai ketentuan terbaru</div>
-        </div>
+
+            <!-- Kolom Kanan: Gambar Guidelines -->
+            <div class="image-col">
+                <div class="guidelines-card">
+                    <div class="guidelines-header">
+                        <span>📘</span> Pedoman Clearance Sale 2026
+                    </div>
+                    <img src="path/to/guidelines-image.jpg" alt="Clearance Guidelines" class="guidelines-img">
+                    <div class="guidelines-caption">Skema diskon sesuai ketentuan terbaru</div>
+                </div>
+            </div>
+        </div> <!-- penutup two-columns -->
+
+        <!-- Area hasil dan tombol kembali berada di bawah kedua kolom -->
         <div id="resultHarga"></div>
 
-       <button class="btn-secondary" onclick="window.location.href='harga.html'">⬅️ Kembali ke Skema Diskon ka Denada</button>
-    </div> 
+        <button class="btn-secondary" onclick="window.location.href='harga.html'">⬅️ Kembali ke Skema Diskon ka Denada</button>
+    </div>
 
     <footer class="footer">
         Created by <strong>Fauzi</strong> &mdash; 2026
     </footer>
 
     <script>
+        // Fungsi toggleProductFields (tetap sama)
+        function toggleProductFields() {
+            const produk = document.getElementById('produk2').value;
+            const labelBulan = document.getElementById('labelBulan');
+            const ketBulan = document.getElementById('ketBulan');
+            const groupHari = document.getElementById('groupHari');
+
+            if (produk === 'sheetmask') {
+                labelBulan.textContent = 'Bulan Expired';
+                ketBulan.textContent = '(pilih bulan expired produk)';
+                groupHari.style.display = 'block';
+            } else {
+                labelBulan.textContent = 'Bulan Saat Ini';
+                ketBulan.textContent = '(untuk produk Reguler)';
+                groupHari.style.display = 'none';
+            }
+        }
+        window.addEventListener('DOMContentLoaded', toggleProductFields);
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+<!-- akan di hapus -->
+    <!-- <script>
         // Atur label dan visibilitas field sesuai produk
         function toggleProductFields() {
             const produk = document.getElementById('produk2').value;
@@ -93,4 +128,4 @@
     </script>
     <script src="script.js"></script>
 </body>
-</html>
+</html> -->
